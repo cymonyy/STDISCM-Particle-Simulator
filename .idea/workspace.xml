@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="876b93d6-769f-42e0-8c36-e77990772d70" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ParticleGui.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ParticleGui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ParticleGui.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test.form" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +53,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.test">
+  <component name="RunManager" selected="Application.ParticleGui">
     <configuration name="ParticleGui" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ParticleGui" />
       <module name="STDISCM-Particle-Simulator" />
@@ -71,8 +70,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.test" />
         <item itemvalue="Application.ParticleGui" />
+        <item itemvalue="Application.test" />
       </list>
     </recent_temporary>
   </component>
@@ -92,7 +91,7 @@
       <option name="presentableId" value="Default" />
       <updated>1707478176341</updated>
       <workItem from="1707478177404" duration="2000" />
-      <workItem from="1707485571949" duration="4366000" />
+      <workItem from="1707485571949" duration="6227000" />
     </task>
     <servers />
   </component>
@@ -106,11 +105,6 @@
           <url>file://$PROJECT_DIR$/src/Main.java</url>
           <line>11</line>
           <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/ParticleGui.java</url>
-          <line>30</line>
-          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

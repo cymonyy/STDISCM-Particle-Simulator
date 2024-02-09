@@ -20,17 +20,20 @@ public class ParticleGui extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
+        setResizable(false);
+
         // Canvas Panel
         canvasPanel = new JPanel();
-        canvasPanel.setBackground(Color.BLACK);
+        canvasPanel.setLayout(new BorderLayout());
+        canvasPanel.setBackground(Color.YELLOW);
         canvasPanel.setPreferredSize(new Dimension(1280, 720));
         add(canvasPanel, BorderLayout.CENTER);
 
         // Create Toolbar Panel
         toolbarPanel = new JPanel();
-        toolbarPanel.setLayout(new BorderLayout());
-        toolbarPanel.setPreferredSize(new Dimension((1920 - canvasPanel.getWidth()), 720 )); // Adjust as needed
-        toolbarPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
+        toolbarPanel.setLayout(new BoxLayout(toolbarPanel, BoxLayout.Y_AXIS));
+        toolbarPanel.setPreferredSize(new Dimension(300, 720 )); // Adjust as needed
+        //toolbarPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10)); // Add padding
 
         add(toolbarPanel, BorderLayout.EAST);
 
@@ -41,7 +44,6 @@ public class ParticleGui extends JFrame {
         pack();
         setLocationRelativeTo(null); // Center the frame
         setVisible(true);
-        setPreferredSize(new Dimension(1920, 1920));
     }
 
     private void addParticlesSection(){
@@ -97,24 +99,71 @@ public class ParticleGui extends JFrame {
         toolbarPanel.add(particleParametersPanel);
     }
 
-    private void addWallSection(){
-        // Add particle parameters section
+    private void addWallSection() {
+        // Add wall parameters section
         JPanel wallParametersPanel = new JPanel(new GridBagLayout()); // Use GridBagLayout
         wallParametersPanel.setBorder(BorderFactory.createTitledBorder("Wall Parameters")); // Add border
         GridBagConstraints gbc = new GridBagConstraints();
 
+        // Add x1 label and text field
+        JLabel x1Label = new JLabel("x1:");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        wallParametersPanel.add(x1Label, gbc);
 
+        JTextField x1Field = new JTextField();
+        x1Field.setPreferredSize(new Dimension(100, 30)); // Set preferred size
+        gbc.gridx = 1;
+        wallParametersPanel.add(x1Field, gbc);
 
-        // Add "Add Wall" button
-        addParticlesButton = new JButton("Add Wall");
+        // Add y1 label and text field
+        JLabel y1Label = new JLabel("y1:");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        wallParametersPanel.add(y1Label, gbc);
+
+        JTextField y1Field = new JTextField();
+        y1Field.setPreferredSize(new Dimension(100, 30)); // Set preferred size
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        wallParametersPanel.add(y1Field, gbc);
+
+        // Add x2 label and text field
+        JLabel x2Label = new JLabel("x2:");
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        wallParametersPanel.add(x2Label, gbc);
+
+        JTextField x2Field = new JTextField();
+        x2Field.setPreferredSize(new Dimension(100, 30)); // Set preferred size
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        wallParametersPanel.add(x2Field, gbc);
+
+        // Add y2 label and text field
+        JLabel y2Label = new JLabel("y2:");
         gbc.gridx = 0;
         gbc.gridy = 3;
-        gbc.gridwidth = 2;
-        wallParametersPanel.add(addParticlesButton, gbc);
+        wallParametersPanel.add(y2Label, gbc);
 
-        // Add particleParametersPanel to toolbarPanel
+        JTextField y2Field = new JTextField();
+        y2Field.setPreferredSize(new Dimension(100, 30)); // Set preferred size
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        wallParametersPanel.add(y2Field, gbc);
+
+        // Add "Add Wall" button
+        JButton addWallButton = new JButton("Add Wall");
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        wallParametersPanel.add(addWallButton, gbc);
+
+        // Add wallParametersPanel to toolbarPanel
         toolbarPanel.add(wallParametersPanel);
     }
+
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(ParticleGui::new);
     }
