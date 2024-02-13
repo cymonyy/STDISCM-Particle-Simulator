@@ -1,17 +1,18 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
-public class Simulator extends JFrame {
+public class Simulator extends JFrame implements WindowListener {
 
 
     private final String[] infoLabels = new String[]{"Elapsed Time (s):", "Frames per Second (FPS):", "Thread Count:", "Particle Count:"};
     private final String[] method1Labels = new String[]{"X-coordinate", "Y-coordinate", "Angle", "Velocity"};
     private HashMap<String, JTextField> method1Quantities;
-    private JPanel canvasPanel;
+    private Canvas canvasPanel;
     private JPanel toolbarPanel;
 
 
@@ -27,9 +28,28 @@ public class Simulator extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         setResizable(false);
+        addWindowListener(this);
 
         addCanvas();
         addToolbar();
+
+
+//        addWindowListener(new WindowAdapter() {
+//            @Override
+//            public void windowClosing(WindowEvent e) {
+//
+//                JFrame frame = (JFrame)e.getSource();
+//                for (Thread thread : canvasPanel.getProducers()){
+//                    try {
+//                        thread.join();
+//                    } catch (InterruptedException ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//                System.out.println("closing");
+//                frame.dispose();
+//            }
+//        });
 
         setVisible(true);
         pack();
@@ -50,20 +70,6 @@ public class Simulator extends JFrame {
         addInformationDisplay();
         addPerParticleMethodDisplay();
         addInformationDisplay();
-
-
-
-//        JPanel measurementsPanel = new JPanel();
-//        measurementsPanel.setBackground(Color.white);
-//        toolbarPanel.add(measurementsPanel);
-//
-//        JPanel secondPanel = new JPanel();
-//        secondPanel.setBackground(Color.black);
-//        toolbarPanel.add(secondPanel);
-//
-//        JPanel third = new JPanel();
-//        third.setBackground(Color.blue);
-//        toolbarPanel.add(third);
 
         add(toolbarPanel, BorderLayout.EAST);
     }
@@ -233,13 +239,82 @@ public class Simulator extends JFrame {
 
     private void addCanvas(){
         // Canvas Panel
-        canvasPanel = new JPanel();
-        canvasPanel.setLayout(new BorderLayout());
-        canvasPanel.setBackground(new Color(13, 21, 23));
-        canvasPanel.setPreferredSize(new Dimension(1280, 720));
+        canvasPanel = new Canvas();
         add(canvasPanel, BorderLayout.CENTER);
 
+        addOneParticle();
+    }
+
+    private void addOneParticle(){
+
+        Queue<Configuration> configurations = new LinkedList<>();
+        configurations.add(new Configuration(
+                0,
+                10,
+                10,
+                45,
+                10,
+                0,
+                0,
+                1
+        ));
+        canvasPanel.addConfigurations(configurations);
+
+//        Queue<AddParticleTask> task = new LinkedList<>();
+//        task.add(new AddParticleTask(
+//                30,
+//                30,
+//                30,
+//                10,
+//                "Method 1",
+//                null,
+//                null
+//        ));
+//
+//        canvasPanel.setParticleTasks(task);
     }
 
 
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        for (Thread thread : canvasPanel.getThreads()){
+            thread.interrupt();
+            try {
+                thread.join();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+        System.out.println("closing");
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
+    }
 }
