@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class Simulator extends JFrame implements WindowListener {
@@ -247,18 +248,41 @@ public class Simulator extends JFrame implements WindowListener {
 
     private void addOneParticle(){
 
-        Queue<Configuration> configurations = new LinkedList<>();
-        configurations.add(new Configuration(
-                0,
-                10,
-                10,
-                45,
-                10,
-                0,
-                0,
-                1
-        ));
-        canvasPanel.addConfigurations(configurations);
+
+        List<Particle> particles = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            particles.add(new Particle(
+                    20+(7*i),
+                    20,
+                    30,
+                    10
+            ));
+        }
+
+        canvasPanel.addParticles(particles);
+
+
+
+//        Queue<Configuration> configurations = new LinkedList<>();
+//        List<Configuration> list = new ArrayList<>();
+//
+//        for (int i = 0; i < 10; i++) {
+//            Configuration config = new Configuration(
+//                    0,
+//                    10,
+//                    10+(32*i),
+//                    45,
+//                    10,
+//                    0,
+//                    0,
+//                    1
+//            );
+//
+//            configurations.add(config);
+//            list.add(config);
+//        }
+//
+//        canvasPanel.addConfigurations(configurations);
 
 //        Queue<AddParticleTask> task = new LinkedList<>();
 //        task.add(new AddParticleTask(
