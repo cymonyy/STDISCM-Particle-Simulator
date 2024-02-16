@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="876b93d6-769f-42e0-8c36-e77990772d70" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Canvas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Canvas.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ParticleSimulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ParticleSimulator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ParticlesSim.java" beforeDir="false" />
-    </list>
+    <list default="true" id="876b93d6-769f-42e0-8c36-e77990772d70" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -95,7 +90,7 @@
       <workItem from="1707887591042" duration="4225000" />
       <workItem from="1708077957557" duration="11184000" />
       <workItem from="1708090099257" duration="1375000" />
-      <workItem from="1708091546533" duration="3614000" />
+      <workItem from="1708091546533" duration="4216000" />
     </task>
     <servers />
   </component>
