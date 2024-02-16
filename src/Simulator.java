@@ -12,17 +12,21 @@ public class Simulator extends JFrame implements WindowListener {
 
     private final String[] infoLabels = new String[]{"Elapsed Time (s):", "Frames per Second (FPS):", "Thread Count:", "Particle Count:"};
     private final String[] method1Labels = new String[]{"X-coordinate", "Y-coordinate", "Angle", "Velocity"};
+    private final String[] wallLabels = new String[]{"X1-coordinate", "Y1-coordinate", "X2-coordinate", "Y2-coordinate"};
+    private final String[] linearParticleLabels = new String[]{"N", "X1-coordinate", "Y1-coordinate", "X2-coordinate", "Y2-coordinate",  "Angle",  "Velocity"};
+    private final String[] angularParticleLabels = new String[]{"N", "X-coordinate", "Y-coordinate", "Start Angle", "End Angle",  "Velocity"};
+    private final String[] velocityParticleLabels = new String[]{"N", "X-coordinate", "Y-coordinate", "Start Velocity", "End Velocity",  "Angle"};
+
+
     private HashMap<String, JTextField> method1Quantities;
     private Canvas canvasPanel;
     private JPanel toolbarPanel;
-
 
     //for information of simulator
     private JLabel fps;
     private JLabel elapsedTime;
     private JLabel particles;
     private JLabel threads;
-
 
     public Simulator(){
         setTitle("Particle Simulation");
@@ -33,24 +37,6 @@ public class Simulator extends JFrame implements WindowListener {
 
         addCanvas();
         addToolbar();
-
-
-//        addWindowListener(new WindowAdapter() {
-//            @Override
-//            public void windowClosing(WindowEvent e) {
-//
-//                JFrame frame = (JFrame)e.getSource();
-//                for (Thread thread : canvasPanel.getProducers()){
-//                    try {
-//                        thread.join();
-//                    } catch (InterruptedException ex) {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//                System.out.println("closing");
-//                frame.dispose();
-//            }
-//        });
 
         setVisible(true);
         pack();
@@ -67,36 +53,29 @@ public class Simulator extends JFrame implements WindowListener {
         toolbarPanel.setLayout(new GridLayout(2, 2, 5, 5));
         toolbarPanel.setBackground(new Color(241,255,248));
 
-        addInformationDisplay();
-        addInformationDisplay();
-        addPerParticleMethodDisplay();
-        addInformationDisplay();
+        addCombinedPanel();
+        JPanel addBatch1 = createAddJPanel("Particle Batch Linear", linearParticleLabels);
+        toolbarPanel.add(addBatch1);
+
+        JPanel addBatch2 = createAddJPanel("Particle Batch Angular", angularParticleLabels);
+        toolbarPanel.add(addBatch2);
+
+        JPanel addBatch3 = createAddJPanel("Particle Batch Velocity", velocityParticleLabels);
+        toolbarPanel.add(addBatch3);
 
         add(toolbarPanel, BorderLayout.EAST);
     }
 
-    private void addInformationDisplay() {
-        JPanel infoPanel = new JPanel();
-        infoPanel.setLayout(new GridLayout(2, 0));
-        infoPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createDashedBorder(Color.DARK_GRAY, 1, 10, 5, true),
-                BorderFactory.createEmptyBorder(15,15,15,15)
-        ));
-
-        JPanel panel = new JPanel();
-        panel.setBackground(Color.CYAN);
-        infoPanel.add(panel);
-
-        JPanel container = new JPanel();
-        container.setLayout(new GridLayout(4, 0));
-        for (String strLabel : infoLabels){
-            addInfo(container, strLabel);
-        }
-        infoPanel.add(container);
-
-        toolbarPanel.add(infoPanel);
+   
+    // Create and return a JLabel for displaying information
+    private JLabel createInfoLabel(String labelText) {
+        JLabel infoLabel = new JLabel("001"); // Initial value
+        infoLabel.setFont(new Font("Arial", Font.BOLD, 15));
+        infoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Add border for sleek appearance
+        infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        return infoLabel;
     }
-
+    
     private void addInfo(JPanel container, String strLabel){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -136,7 +115,118 @@ public class Simulator extends JFrame implements WindowListener {
 
         container.add(panel);
     }
+    private void addCombinedPanel() {
+        JPanel combinedPanel = new JPanel(new GridLayout(3, 1, 10, 10)); // 3 rows, 1 column
+        combinedPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createDashedBorder(Color.DARK_GRAY, 1, 10, 5, false),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        ));
+    
+        // Information display panel
+        JPanel infoPanel = new JPanel(new GridLayout(0, 2, 5, 5)); // 2 columns
+        for (String strLabel : infoLabels) {
+            JLabel label = new JLabel(strLabel);
+            label.setFont(new Font("Arial", Font.BOLD, 14)); // Adjust font size
+            infoPanel.add(label);
+    
+            JLabel info = createInfoLabel(strLabel);
+            info.setFont(new Font("Arial", Font.PLAIN, 14)); // Adjust font size
+            infoPanel.add(info);
+        }
+        combinedPanel.add(infoPanel);
+    
+        // Add-a-particle panel
+        JPanel addParticlePanel = createAddJPanel("ADD A PARTICLE", method1Labels);
+        combinedPanel.add(addParticlePanel);
+    
+        // Add-a-wall panel
+        JPanel addWallPanel = createAddJPanel("ADD A WALL", wallLabels);
+    
+        combinedPanel.add(addWallPanel);
+        toolbarPanel.add(combinedPanel);
+    }
+    
+    private JPanel createAddJPanel(String title, String[] labels) {
+        JPanel panel = new JPanel(new BorderLayout());
+        JLabel header = new JLabel(title);
+        header.setHorizontalAlignment(SwingConstants.CENTER);
+        header.setFont(new Font("Arial", Font.BOLD, 16));
+        panel.add(header, BorderLayout.NORTH);
+    
+        JPanel container = new JPanel();
+        container.setLayout(new GridLayout(labels.length, 1, 5, 5)); // Adjust gaps
+    
+        method1Quantities = new HashMap<>();
+        for (String label : labels) {
+            addQuantityPanel(label, container);
+            System.out.println(label);
+        }
+        panel.add(new JScrollPane(container), BorderLayout.CENTER); // Use JScrollPane to handle overflow
+    
+        JButton addButton = new JButton("Add now");
+        addButton.setFont(new Font("Arial", Font.BOLD, 14));
+        panel.add(addButton, BorderLayout.SOUTH);
+    
+        return panel;
+    }
+    
+    // private void addCombinedPanel() {
+    //     JPanel combinedPanel = new JPanel(new GridLayout(3, 1, 10, 10)); // 3 rows, 1 column
+    //     combinedPanel.setBorder(BorderFactory.createCompoundBorder(
+    //             BorderFactory.createDashedBorder(Color.DARK_GRAY, 1, 10, 5, false),
+    //             BorderFactory.createEmptyBorder(10, 10, 10,10)
+    //     ));
+    
+    //     // Information display panel
+    //     JPanel infoPanel = new JPanel(new GridLayout(0, 2, 5, 5)); // 2 columns
+    //     for (String strLabel : infoLabels) {
+    //         JLabel label = new JLabel(strLabel);
+    //         label.setFont(new Font("Arial", Font.BOLD, 10));
+    //         infoPanel.add(label);
+    
+    //         JLabel info = createInfoLabel(strLabel);
+    //         infoPanel.add(info);
+    //     }
+    //     combinedPanel.add(infoPanel);
+    
+    //     // Add-a-particle panel
+    //     JPanel addParticlePanel = createAddJPanel("ADD A PARTICLE", method1Labels);
+    //     combinedPanel.add(addParticlePanel);
+    
+    //     // Add-a-wall panel
+    //     JPanel addWallPanel = createAddJPanel("ADD A WALL", wallLabels);
 
+    //     combinedPanel.add(addWallPanel);
+    //     toolbarPanel.add(combinedPanel);
+    // }
+    
+    // private JPanel createAddJPanel(String title, String[] labels) {
+    //     JPanel panel = new JPanel(new BorderLayout());
+    //     JLabel header = new JLabel(title);
+    //     header.setHorizontalAlignment(SwingConstants.CENTER);
+    //     header.setFont(new Font("Arial", Font.BOLD, 16));
+    //     panel.add(header, BorderLayout.NORTH);
+    
+    //     JPanel container = new JPanel();
+    //     container.setLayout(new FlowLayout(FlowLayout.LEFT)); 
+    //     container.setPreferredSize(new Dimension(200, labels.length * 30)); // Adjust the width and height as needed
+
+
+    //     method1Quantities = new HashMap<>();
+    //     for (String label : labels) {
+    //         addQuantityPanel(label, container);
+    //         System.out.println(label);
+    //     }
+    //     panel.add(container, BorderLayout.CENTER);
+    
+    //     JButton addButton = new JButton("Add now");
+    //     panel.add(addButton, BorderLayout.SOUTH);
+    
+    //     return panel;
+    // }
+    
+    
+    
     private void addPerParticleMethodDisplay(){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -174,12 +264,12 @@ public class Simulator extends JFrame implements WindowListener {
         JTextField quantity = new JTextField("0");
         method1Quantities.put(label, quantity);
 
-        quantity.setPreferredSize(new Dimension(50, 20));
-        quantity.setFont(new Font("Arial", Font.BOLD, 14));
+        quantity.setPreferredSize(new Dimension(50, 25));
+        quantity.setFont(new Font("Arial", Font.BOLD, 12));
         quantity.setHorizontalAlignment(SwingConstants.CENTER);
 
         JButton increment = new JButton("+");
-        increment.setFont(new Font("Arial", Font.BOLD, 16));
+        increment.setFont(new Font("Arial", Font.PLAIN, 12));
         increment.setPreferredSize(new Dimension(45, 20));
         increment.setForeground(Color.white);
         increment.setBackground(new Color(13, 21, 23));
@@ -198,7 +288,7 @@ public class Simulator extends JFrame implements WindowListener {
         });
 
         JButton decrement = new JButton("-");
-        decrement.setFont(new Font("Arial", Font.BOLD, 16));
+        decrement.setFont(new Font("Arial", Font.PLAIN, 12));
         decrement.setPreferredSize(new Dimension(45, 20));
         decrement.setForeground(Color.white);
         decrement.setBackground(new Color(13, 21, 23));
@@ -247,8 +337,6 @@ public class Simulator extends JFrame implements WindowListener {
     }
 
     private void addOneParticle(){
-
-
         List<Particle> particles = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             particles.add(new Particle(
@@ -260,42 +348,6 @@ public class Simulator extends JFrame implements WindowListener {
         }
 
         canvasPanel.addParticles(particles);
-
-
-
-//        Queue<Configuration> configurations = new LinkedList<>();
-//        List<Configuration> list = new ArrayList<>();
-//
-//        for (int i = 0; i < 10; i++) {
-//            Configuration config = new Configuration(
-//                    0,
-//                    10,
-//                    10+(32*i),
-//                    45,
-//                    10,
-//                    0,
-//                    0,
-//                    1
-//            );
-//
-//            configurations.add(config);
-//            list.add(config);
-//        }
-//
-//        canvasPanel.addConfigurations(configurations);
-
-//        Queue<AddParticleTask> task = new LinkedList<>();
-//        task.add(new AddParticleTask(
-//                30,
-//                30,
-//                30,
-//                10,
-//                "Method 1",
-//                null,
-//                null
-//        ));
-//
-//        canvasPanel.setParticleTasks(task);
     }
 
 
