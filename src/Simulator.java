@@ -170,92 +170,6 @@ public class Simulator extends JFrame implements WindowListener {
         return panel;
     }
     
-    // private void addCombinedPanel() {
-    //     JPanel combinedPanel = new JPanel(new GridLayout(3, 1, 10, 10)); // 3 rows, 1 column
-    //     combinedPanel.setBorder(BorderFactory.createCompoundBorder(
-    //             BorderFactory.createDashedBorder(Color.DARK_GRAY, 1, 10, 5, false),
-    //             BorderFactory.createEmptyBorder(10, 10, 10,10)
-    //     ));
-    
-    //     // Information display panel
-    //     JPanel infoPanel = new JPanel(new GridLayout(0, 2, 5, 5)); // 2 columns
-    //     for (String strLabel : infoLabels) {
-    //         JLabel label = new JLabel(strLabel);
-    //         label.setFont(new Font("Arial", Font.BOLD, 10));
-    //         infoPanel.add(label);
-    
-    //         JLabel info = createInfoLabel(strLabel);
-    //         infoPanel.add(info);
-    //     }
-    //     combinedPanel.add(infoPanel);
-    
-    //     // Add-a-particle panel
-    //     JPanel addParticlePanel = createAddJPanel("ADD A PARTICLE", method1Labels);
-    //     combinedPanel.add(addParticlePanel);
-    
-    //     // Add-a-wall panel
-    //     JPanel addWallPanel = createAddJPanel("ADD A WALL", wallLabels);
-
-    //     combinedPanel.add(addWallPanel);
-    //     toolbarPanel.add(combinedPanel);
-    // }
-    
-    // private JPanel createAddJPanel(String title, String[] labels) {
-    //     JPanel panel = new JPanel(new BorderLayout());
-    //     JLabel header = new JLabel(title);
-    //     header.setHorizontalAlignment(SwingConstants.CENTER);
-    //     header.setFont(new Font("Arial", Font.BOLD, 16));
-    //     panel.add(header, BorderLayout.NORTH);
-    
-    //     JPanel container = new JPanel();
-    //     container.setLayout(new FlowLayout(FlowLayout.LEFT)); 
-    //     container.setPreferredSize(new Dimension(200, labels.length * 30)); // Adjust the width and height as needed
-
-
-    //     method1Quantities = new HashMap<>();
-    //     for (String label : labels) {
-    //         addQuantityPanel(label, container);
-    //         System.out.println(label);
-    //     }
-    //     panel.add(container, BorderLayout.CENTER);
-    
-    //     JButton addButton = new JButton("Add now");
-    //     panel.add(addButton, BorderLayout.SOUTH);
-    
-    //     return panel;
-    // }
-    
-    
-    
-    private void addPerParticleMethodDisplay(){
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        panel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createDashedBorder(Color.DARK_GRAY, 1, 10, 5, true),
-                BorderFactory.createEmptyBorder(15,15,15,15)
-        ));
-        setBackground(Color.cyan);
-
-        JLabel header = new JLabel("ADD A PARTICLE");
-        header.setHorizontalAlignment(SwingConstants.CENTER);
-        header.setFont(new Font("Arial", Font.BOLD, 20));
-        panel.add(header, BorderLayout.NORTH);
-
-
-        JPanel container = new JPanel();
-        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-        method1Quantities = new HashMap<>();
-        for (String label : method1Labels){
-            addQuantityPanel(label, container);
-        }
-        panel.add(container, BorderLayout.CENTER);
-
-        JButton addParticleButton = new JButton("Add Now");
-        panel.add(addParticleButton, BorderLayout.SOUTH);
-
-
-        toolbarPanel.add(panel);
-    }
 
     private void addQuantityPanel(String label, JPanel panel) {
         JPanel container = new JPanel();
@@ -271,7 +185,7 @@ public class Simulator extends JFrame implements WindowListener {
         JButton increment = new JButton("+");
         increment.setFont(new Font("Arial", Font.PLAIN, 12));
         increment.setPreferredSize(new Dimension(45, 20));
-        increment.setForeground(Color.white);
+        increment.setForeground(Color.black);
         increment.setBackground(new Color(13, 21, 23));
         increment.setFocusPainted(false);
         increment.addActionListener(new ActionListener() {
@@ -290,7 +204,7 @@ public class Simulator extends JFrame implements WindowListener {
         JButton decrement = new JButton("-");
         decrement.setFont(new Font("Arial", Font.PLAIN, 12));
         decrement.setPreferredSize(new Dimension(45, 20));
-        decrement.setForeground(Color.white);
+        decrement.setForeground(Color.black);
         decrement.setBackground(new Color(13, 21, 23));
         decrement.setFocusPainted(false);
         decrement.addActionListener(new ActionListener() {
