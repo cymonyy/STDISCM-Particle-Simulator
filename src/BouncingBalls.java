@@ -15,7 +15,6 @@ public class BouncingBalls extends JPanel implements MouseListener {
 
     private List<Wall> walls = new ArrayList<>();
 
-
     private DrawCanvas canvas;
     private int canvasWidth;
     private int canvasHeight;
@@ -159,98 +158,91 @@ public class BouncingBalls extends JPanel implements MouseListener {
             g.setColor(new Color(red, green, blue));
             g.fillOval(x, 720 - y, 10, 10);
         }
-
+        /* */
         public void move(List<Wall> walls) {
-            // Move the ball based on its velocity and angle
-            x += (int) (velocity * Math.cos(Math.toRadians(angle)));
-            y += (int) (velocity * Math.sin(Math.toRadians(angle)));
-
-            // Check for collision with screen boundaries
-            if (x <= 0 || x >= 1280) {
-                // Reflect the angle
-                angle = 180 - angle;
-            }
-            if (y <= 0 || y >= 720) {
-                // Reflect the angle
-                angle = -angle;
-            }
-
             int nextX = x + (int) (velocity * Math.cos(Math.toRadians(angle)));
             int nextY = y + (int) (velocity * Math.sin(Math.toRadians(angle)));
-
+        
             // Check for collision with walls
             for (Wall wall : walls) {
                 if (wall.willCollide(x, y, nextX, nextY)) {
-                    // Determine the direction the ball is approaching the wall from
                     double dx = nextX - x;
                     double dy = nextY - y;
-                    double wallAngle = Math.atan2(wall.q2.y - wall.q1.y, wall.q2.x - wall.q1.x);
-                    double angleBetween = Math.atan2(dy, dx) - wallAngle;
-
-                    // Reflect the velocity only if the ball is approaching the wall from the outside
-                    if (angleBetween < -Math.PI / 2 || angleBetween > Math.PI / 2) {
-                        angle = (int) (2 * wallAngle - angle);
+                    double wallAngle = Math.atan2(wall.getQ2().y - wall.getQ1().y, wall.getQ2().x - wall.getQ1().x);
+        
+                    // Calculate angle of reflection
+                    double incidentAngle = Math.atan2(dy, dx);
+                    double reflectionAngle = 2 * wallAngle - incidentAngle;
+                    while (reflectionAngle < 0) {
+                        reflectionAngle += 2 * Math.PI;
                     }
-
-                    break; // Stop checking for collisions if one is detected
+                    while (reflectionAngle > 2 * Math.PI) {
+                        reflectionAngle -= 2 * Math.PI;
+                    }
+        
+                    // Update ball angle
+                    angle = (int) Math.toDegrees(reflectionAngle);
+        
+                    // Move the ball to the point of collision
+                    x = (int) (x + Math.cos(reflectionAngle) * velocity);
+                    y = (int) (y + Math.sin(reflectionAngle) * velocity);
+        
+                    break;
                 }
             }
-
-//            // Update the ball position
-//            x = nextX;
-//            y = nextY;
+        
+            // Check for collision with screen boundaries and reflect if necessary
+            if (x <= 0 || x >= 1280) {
+                angle = 180 - angle;
+            }
+            if (y <= 0 || y >= 720) {
+                angle = -angle;
+            }
+        
+            // Move the ball
+            x += (int) (velocity * Math.cos(Math.toRadians(angle)));
+            y += (int) (velocity * Math.sin(Math.toRadians(angle)));
         }
-
-
-//        public void move(List<Wall> walls) {
-//
-//            boolean bended = false;
-//
-//            // Move the ball based on its velocity and angle
-//            x += (int) (velocity * Math.cos(Math.toRadians(angle)));
-//            y += (int) (velocity * Math.sin(Math.toRadians(angle)));
-//
-//            // Check for collision with screen boundaries
-//            if (x <= 0 || x >= 1280) {
-//                // Reflect the angle
-//                angle = 180 - angle;
-//                bended = true;
-//            }
-//            if (y <= 0 || y >= 720) {
-//                // Reflect the angle
-//                angle = -angle;
-//                bended = true;
-//            }
-//
-//
-//            if (!bended){
-//                int nextX = x + (int) (velocity * Math.cos(Math.toRadians(angle)));
-//                int nextY = y + (int) (velocity * Math.sin(Math.toRadians(angle)));
-//                // Check for collision with walls
-//                for (Wall wall : walls) {
-//                    if (wall.willCollide(x, y, nextX, nextY)) {
-//
-//
-//                        double normalAngle = Math.atan2(wall.q2.y - wall.q1.y, wall.q2.x - wall.q1.x);
-//                        System.out.println("Wall Angle: " + normalAngle);
-//
-//
-//                        angle = (int) (normalAngle - angle);
-//                        System.out.println("Reflected Angle: " + angle);
-//
-//                        break; // Stop checking for collisions if one is detected
-//                    }
-//                }
-//
-//            }
-//
-//
-//
-//        }
-
-
-
-
+        
+        // public void move(List<Wall> walls) {
+        //     int nextX = x + (int) (velocity * Math.cos(Math.toRadians(angle)));
+        //     int nextY = y + (int) (velocity * Math.sin(Math.toRadians(angle)));
+        
+        //     boolean collided = false; // Flag to track if a collision occurred
+        //     // Check for collision with walls
+        //     for (Wall wall : walls) {
+        //         if (wall.willCollide(x, y, nextX, nextY)) {
+        //             double dx = nextX - x;
+        //             double dy = nextY - y;
+        //             double wallAngle = Math.atan2(wall.q2.y - wall.q1.y, wall.q2.x - wall.q1.x);
+        //             double angleBetween = Math.atan2(dy, dx) - wallAngle;
+        
+        //             // Reflect the velocity only if the ball is approaching the wall from the outside
+        //             if (angleBetween < -Math.PI / 2 || angleBetween > Math.PI / 2) {
+        //                 double incidentAngle = Math.atan2(dy, dx); // Angle of incidence
+        //                 double reflectionAngle = 2 * wallAngle - incidentAngle; // Angle of reflection
+        //                 angle = (int) Math.toDegrees(reflectionAngle); // Convert to degrees
+        //                 collided = true; // Set collision flag
+        //                 System.out.println("collided");
+        //             }
+        
+        //             break; 
+        //         }
+        //     }
+        //     // If no collision with walls, move the ball based on its velocity and angle
+        //     if (!collided) {
+        //         x = nextX;
+        //         y = nextY;
+        
+        //         // Check for collision with screen boundaries and reflect if necessary
+        //         if (x <= 0 || x >= 1280) {
+        //             angle = 180 - angle;
+        //         }
+        //         if (y <= 0 || y >= 720) {
+        //             angle = -angle;
+        //         }
+        //     }
+        // }
 
         public static int random(int maxRange) {
             return (int) Math.round((Math.random() * maxRange));
@@ -362,496 +354,3 @@ public class BouncingBalls extends JPanel implements MouseListener {
         }
     }
 }
-
-//                        double incidentAngle = Math.atan2(Math.sin(angle), Math.cos(angle));
-//                        System.out.println("Incident Angle: " + incidentAngle);
-
-// Reflect the angle
-//                    double wallAngle = Math.atan2(wall.q2.y - wall.q1.y, wall.q2.x - wall.q1.x);
-//                    double incidenceAngle = Math.atan2(y - wall.q1.y, x - wall.q1.x);
-//                    double reflectionAngle = wallAngle - incidenceAngle;
-//                        angle = 180 - angle;
-//                    angle = wall.reflectAngle(angle);
-//                    // Move the ball to the reflection point to avoid tunneling
-//                    x = wall.reflectionX(x, nextX);
-//                    y = wall.reflectionY(y, nextY);
-
-
-//                        velocity = -velocity;
-
-// Convert wall angle to radians
-//                        double wallAngle = Math.toRadians(Math.atan2(wall.q2.y - wall.q1.y, wall.q2.x - wall.q1.x));
-//
-//                        // Calculate the final velocity angle after bounce
-//                        angle = (int) - Math.toDegrees((2 * wallAngle - Math.PI));
-
-
-// Calculate the final velocity magnitude
-//                        double finalVelocityMagnitude = ballVelocity;
-
-//
-
-//            // Check for collision with walls
-//            for (Wall wall : walls) {
-//                if (wall.intersects(x, y)) {
-//                    angle = wall.reflectAngle(angle);
-//                    break; // Stop checking for collisions if one is detected
-//                }
-//            }
-//
-//            // Check for collision with walls
-//            if (x <= 0 || x >= 1280) { // 20 is the diameter of the ball
-//                angle = 180 - angle; // Reflect the angle
-//            }
-//            if (y <= 0 || y >= 720) {
-//                angle = -angle; // Reflect the angle
-//            }
-//
-//            x += (int) (velocity * Math.cos(Math.toRadians(angle)));
-//            y += (int) (velocity * Math.sin(Math.toRadians(angle)));
-//
-//        }
-
-//    public static class Wall {
-//        private int x1, y1, x2, y2;
-//
-//        public Wall(int x1, int y1, int x2, int y2) {
-//            this.x1 = x1;
-//            this.y1 = y1;
-//            this.x2 = x2;
-//            this.y2 = y2;
-//        }
-//
-//        public void draw(Graphics g) {
-//            g.setColor(Color.BLACK);
-//            g.drawLine(x1, 720 - y1, x2, 720 - y2);
-//        }
-//
-//        public boolean intersects(int ballX, int ballY) {
-//            // Calculate the vector components
-//            double wallX = x2 - x1;
-//            double wallY = y2 - y1;
-//            double ballToStartX = ballX - x1;
-//            double ballToStartY = ballY - y1;
-//
-//            // Calculate the dot product
-//            double dotProduct = wallX * ballToStartX + wallY * ballToStartY;
-//
-//            // Calculate the projection
-//            double projectionX, projectionY;
-//            if (dotProduct <= 0) {
-//                projectionX = x1;
-//                projectionY = y1;
-//            } else {
-//                double lengthSquared = wallX * wallX + wallY * wallY;
-//                if (dotProduct >= lengthSquared) {
-//                    projectionX = x2;
-//                    projectionY = y2;
-//                } else {
-//                    double t = dotProduct / lengthSquared;
-//                    projectionX = x1 + t * wallX;
-//                    projectionY = y1 + t * wallY;
-//                }
-//            }
-//
-//            // Calculate the distance between the ball's center and the projection
-//            double distance = Math.sqrt(Math.pow(ballX - projectionX, 2) + Math.pow(ballY - projectionY, 2));
-//
-//            // Check if the distance is less than or equal to the ball's radius
-//            return distance <= 10; // Assuming a fixed radius for the ball
-//        }
-//
-//        public int reflectAngle(int angle) {
-//            return 180 - angle; // Reflect the angle
-//        }
-//    }
-
-
-/*
-*
-* */
-
-
-//import javax.swing.*;
-//import java.awt.*;
-//import java.awt.event.MouseEvent;
-//import java.awt.event.MouseListener;
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.concurrent.locks.ReadWriteLock;
-//import java.util.concurrent.locks.ReentrantReadWriteLock;
-//
-//public class BouncingBalls extends JPanel implements MouseListener {
-//    protected List<Ball> balls = new ArrayList<>(20);
-//    private List<Thread> threads = new ArrayList<>(8);
-//    private DrawCanvas canvas;
-//    private int canvasWidth;
-//    private int canvasHeight;
-//    public static final int UPDATE_RATE = 30;
-//    private static int MAX_BALLS = 0;
-//    private final ReadWriteLock lock = new ReentrantReadWriteLock();
-//
-//    public BouncingBalls(int width, int height) {
-//        canvasWidth = width;
-//        canvasHeight = height;
-//        canvas = new DrawCanvas();
-//        this.setLayout(new BorderLayout());
-//        this.add(canvas, BorderLayout.CENTER);
-//        this.addMouseListener(this);
-//        start();
-//    }
-//
-//    public void start() {
-//        for (int i = 0; i < 8; i++) {
-//            Thread t = new Thread(() -> {
-//                while (true) {
-//                    update();
-//                    repaint();
-//                    try {
-//                        Thread.sleep(1000 / UPDATE_RATE);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            });
-//            threads.add(t);
-//            t.start();
-//        }
-//    }
-//
-//    public void update() {
-//        lock.writeLock().lock();
-//        try {
-//            for (Ball ball : balls) {
-//                ball.move();
-//            }
-//        } finally {
-//            lock.writeLock().unlock();
-//        }
-//    }
-//
-//    @Override
-//    public void mouseClicked(MouseEvent e) {
-//    }
-//
-//    @Override
-//    public void mousePressed(MouseEvent e) {
-//        lock.writeLock().lock();
-//        try {
-//            balls.add(new Ball());
-//            MAX_BALLS += balls.size();
-//        } finally {
-//            lock.writeLock().unlock();
-//        }
-//    }
-//
-//    @Override
-//    public void mouseReleased(MouseEvent e) {
-//    }
-//
-//    @Override
-//    public void mouseEntered(MouseEvent e) {
-//    }
-//
-//    @Override
-//    public void mouseExited(MouseEvent e) {
-//    }
-//
-//    class DrawCanvas extends JPanel {
-//        public void paintComponent(Graphics g) {
-//            super.paintComponent(g);
-//            lock.readLock().lock();
-//            try {
-//                for (Ball ball : balls) {
-//                    ball.draw(g);
-//                }
-//            } finally {
-//                lock.readLock().unlock();
-//            }
-//        }
-//
-//        public Dimension getPreferredSize() {
-//            return (new Dimension(canvasWidth, canvasHeight));
-//        }
-//    }
-//
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> {
-//            JFrame f = new JFrame("Bouncing Balls");
-//            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//            f.setContentPane(new BouncingBalls(1280, 720));
-//            f.pack();
-//            f.setVisible(true);
-//        });
-//    }
-//
-//    public static class Ball {
-//        private int x;
-//        private int y;
-//        private int speedX;
-//        private int speedY;
-//        private int radius;
-//        private int red;
-//        private int green;
-//        private int blue;
-//
-//        public Ball() {
-//            this.x = random(480);
-//            this.y = random(480);
-//            this.speedX = random(30);
-//            this.speedY = random(30);
-//            this.radius = random(20);
-//            this.red = random(255);
-//            this.green = random(255);
-//            this.blue = random(255);
-//        }
-//
-//        public void draw(Graphics g) {
-//            g.setColor(new Color(red, green, blue));
-//            g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
-//        }
-//
-//        public void move() {
-//            x += speedX;
-//            y += speedY;
-//            if (x - radius < 0) {
-//                speedX = -speedX;
-//                x = radius;
-//            } else if (x + radius > 1280) {
-//                speedX = -speedX;
-//                x = 1280 - radius;
-//            }
-//            if (y - radius < 0) {
-//                speedY = -speedY;
-//                y = radius;
-//            } else if (y + radius > 720) {
-//                speedY = -speedY;
-//                y = 720 - radius;
-//            }
-//        }
-//    }
-//
-//    public static int random(int maxRange) {
-//        return (int) Math.round((Math.random() * maxRange));
-//    }
-//}
-
-
-//import javax.swing.*;
-//import java.awt.*;
-//import java.awt.event.MouseEvent;
-//import java.awt.event.MouseListener;
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.concurrent.BlockingQueue;
-//import java.util.concurrent.LinkedBlockingQueue;
-//import java.util.concurrent.locks.Lock;
-//import java.util.concurrent.locks.ReentrantLock;
-//
-//public class BouncingBalls extends JPanel implements MouseListener {
-//    protected List<Ball> balls = new ArrayList<>(20);
-//    private List<Thread> threads = new ArrayList<>(8);
-//    private DrawCanvas canvas;
-//    private int canvasWidth;
-//    private int canvasHeight;
-//    public static final int UPDATE_RATE = 30;
-//    private BlockingQueue<Ball> queue = new LinkedBlockingQueue<>();
-//    public static  int count = 0;
-//
-//
-//
-//    private final Lock lock = new ReentrantLock();
-//
-//    public BouncingBalls(int width, int height) {
-//        canvasWidth = width;
-//        canvasHeight = height;
-//        canvas = new DrawCanvas();
-//        this.setLayout(new BorderLayout());
-//        this.add(canvas, BorderLayout.CENTER);
-//        this.addMouseListener(this);
-//        start();
-//    }
-//
-//    public void start() {
-//
-//
-//        for (int i = 0; i < 8; i++) {
-//            Thread t = new Thread(() -> {
-//
-//                while (true){
-//                    lock.lock();
-//                    try{
-//                        if (!queue.isEmpty()){
-//                            Ball ball = queue.take();
-//                            ball.move();
-//                            queue.add(ball);
-//                            count++;
-//
-//                            if(count == queue.size()) {
-//                                count = 0;
-//                                repaint();
-//
-////                                try {
-////                                    Thread.sleep(1000 / UPDATE_RATE);
-////                                } catch (InterruptedException e) {
-////                                    e.printStackTrace();
-////                                }
-//                            }
-//                        }
-////                        if (balls.isEmpty())
-////                        Ball ball = balls.get(count);
-////                        ball.move();
-////                        count++;
-////
-////                        if (count >= balls.size()){
-////                            repaint();
-////                            count = 0;
-////                            try {
-////                                Thread.sleep(1000 / UPDATE_RATE);
-////                            } catch (InterruptedException e) {
-////                                e.printStackTrace();
-////                            }
-////                        }
-////
-//                    }catch (Exception e){
-//                        e.printStackTrace();
-//                    }
-//                    finally {
-//                        lock.unlock();
-//
-//                    }
-//                }
-//
-//
-//
-//
-////                while (true) {
-////                    update();
-////                    repaint();
-////                    try {
-////                        Thread.sleep(1000 / UPDATE_RATE);
-////                    } catch (InterruptedException e) {
-////                        e.printStackTrace();
-////                    }
-////                }
-//            });
-//            threads.add(t);
-//            t.start();
-//        }
-//
-//
-//    }
-//
-//    public void update() {
-//        lock.lock();
-//        try {
-//            for (Ball ball : balls) {
-//                ball.move();
-//            }
-//        } finally {
-//            lock.unlock();
-//        }
-//    }
-//
-//    @Override
-//    public void mouseClicked(MouseEvent e) {
-//    }
-//
-//    @Override
-//    public void mousePressed(MouseEvent e) {
-//        lock.lock();
-//        try {
-//            Ball ball = new Ball();
-//            balls.add(ball);
-//            queue.add(ball);
-//
-//        } finally {
-//            lock.unlock();
-//        }
-//    }
-//
-//    @Override
-//    public void mouseReleased(MouseEvent e) {
-//    }
-//
-//    @Override
-//    public void mouseEntered(MouseEvent e) {
-//    }
-//
-//    @Override
-//    public void mouseExited(MouseEvent e) {
-//    }
-//
-//    class DrawCanvas extends JPanel {
-//        public void paintComponent(Graphics g) {
-//            super.paintComponent(g);
-//            for (Ball ball : balls) {
-//                ball.draw(g);
-//            }
-//        }
-//
-//        public Dimension getPreferredSize() {
-//            return (new Dimension(canvasWidth, canvasHeight));
-//        }
-//    }
-//
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> {
-//            JFrame f = new JFrame("Bouncing Balls");
-//            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//            f.setContentPane(new BouncingBalls(1280, 720));
-//            f.pack();
-//            f.setVisible(true);
-//        });
-//    }
-//
-//    public static class Ball {
-//        private int x;
-//        private int y;
-//        private int speedX;
-//        private int speedY;
-//        private int radius;
-//        private int red;
-//        private int green;
-//        private int blue;
-//
-//        public Ball() {
-//            this.x = random(480);
-//            this.y = random(480);
-//            this.speedX = random(30);
-//            this.speedY = random(30);
-//            this.radius = random(20);
-//            this.red = random(255);
-//            this.green = random(255);
-//            this.blue = random(255);
-//        }
-//
-//        public void draw(Graphics g) {
-//            g.setColor(new Color(red, green, blue));
-//            g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
-//        }
-//
-//        public void move() {
-//            x += speedX;
-//            y += speedY;
-//            if (x - radius < 0) {
-//                speedX = -speedX;
-//                x = radius;
-//            } else if (x + radius > 1280) {
-//                speedX = -speedX;
-//                x = 1280 - radius;
-//            }
-//            if (y - radius < 0) {
-//                speedY = -speedY;
-//                y = radius;
-//            } else if (y + radius > 720) {
-//                speedY = -speedY;
-//                y = 720 - radius;
-//            }
-//        }
-//    }
-//
-//    public static int random(int maxRange) {
-//        return (int) Math.round((Math.random() * maxRange));
-//    }
-//}
