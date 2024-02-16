@@ -18,7 +18,7 @@
 //    public ParticleGui() {
 //        setTitle("Particle Simulation");
 //        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        setLayout(new BorderLayout());
+//        setLayout(new BorderLayout());2
 //
 //        setResizable(false);
 //
