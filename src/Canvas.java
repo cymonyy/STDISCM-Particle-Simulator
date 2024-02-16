@@ -85,7 +85,7 @@ public class Canvas extends JPanel {
                             particle.move(walls);
                             queue.add(particle);
                             count++;
-                            if (count == queue.size()) {
+                            if (count == particles.size()) {
                                 count = 0;
                                 repaint();
                                 Thread.sleep(1000 / UPDATE_RATE);
