@@ -36,9 +36,6 @@ public class ParticleSimulator extends JFrame {
         pack();
         setVisible(true);
 
-        // Start the FPS counter thread
-        ///startFPSTracker();
-
     }
 
     private void addCanvas() {
@@ -72,18 +69,6 @@ public class ParticleSimulator extends JFrame {
         add(toolbarPanel, BorderLayout.EAST);
     }
 
-    //        // Information display panel
-//        JPanel infoPanel = new JPanel(new GridLayout(0, 2, 5, 5)); // 2 columns
-//        for (String strLabel : infoLabels) {
-//            JLabel label = new JLabel(strLabel);
-//            label.setFont(new Font("Arial", Font.BOLD, 14)); // Adjust font size
-//            infoPanel.add(label);
-//
-//            JLabel info = createInfoLabel(strLabel);
-//            info.setFont(new Font("Arial", Font.PLAIN, 14)); // Adjust font size
-//            infoPanel.add(info);
-//        }
-//        combinedPanel.add(infoPanel);
 
     private void addCombinedPanel() {
         JPanel combinedPanel = new JPanel(new GridLayout(2, 1, 10, 0)); // 3 rows, 1 column
@@ -104,16 +89,6 @@ public class ParticleSimulator extends JFrame {
     }
 
 
-
-
-
-    private JLabel createInfoLabel(String labelText) {
-        JLabel infoLabel = new JLabel("001"); // Initial value
-        infoLabel.setFont(new Font("Arial", Font.BOLD, 15));
-        infoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Add border for sleek appearance
-        infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        return infoLabel;
-    }
 
     private JPanel createAddJPanel(String title, String[] labels) {
         JPanel panel = new JPanel(new BorderLayout());

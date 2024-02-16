@@ -16,8 +16,6 @@ public class Wall {
 
         public void draw(Graphics g) {
             g.setColor(Color.black);
-//            g.fillOval(q1.x, 720 - q1.y, 20, 20);
-//            g.fillOval(q2.x, 720 - q2.y, 20, 20);
 
             g.drawLine(q1.x, 720 - q1.y, q2.x, 720 - q2.y);
         }
