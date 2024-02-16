@@ -2,11 +2,11 @@ public class Particle {
     private int x;
     private int y;
 
-    private double angle;
+    private int angle;
 
-    private double velocity;
+    private int velocity;
 
-    public Particle(int x, int y, double angle, double velocity) {
+    public Particle(int x, int y, int angle, int velocity) {
         this.x = x;
         this.y = y;
         this.angle = angle;
@@ -34,7 +34,7 @@ public class Particle {
         return angle;
     }
 
-    public void setAngle(double angle) {
+    public void setAngle(int angle) {
         this.angle = angle;
     }
 
@@ -42,7 +42,7 @@ public class Particle {
         return velocity;
     }
 
-    public void setVelocity(double velocity) {
+    public void setVelocity(int velocity) {
         this.velocity = velocity;
     }
 

@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public class Simulator extends JFrame implements WindowListener {
+public class Simulator extends JFrame {
 
 
     private final String[] infoLabels = new String[]{"Elapsed Time (s):", "Frames per Second (FPS):", "Thread Count:", "Particle Count:"};
@@ -18,7 +18,7 @@ public class Simulator extends JFrame implements WindowListener {
     private final String[] velocityParticleLabels = new String[]{"N", "X-coordinate", "Y-coordinate", "Start Velocity", "End Velocity",  "Angle"};
 
 
-    private HashMap<String, JTextField> method1Quantities;
+    private HashMap<String, JTextField> methodQuantities;
     private Canvas canvasPanel;
     private JPanel toolbarPanel;
 
@@ -33,9 +33,9 @@ public class Simulator extends JFrame implements WindowListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         setResizable(false);
-        addWindowListener(this);
 
         addCanvas();
+
         addToolbar();
 
         setVisible(true);
@@ -45,6 +45,8 @@ public class Simulator extends JFrame implements WindowListener {
     }
 
     private void addToolbar() {
+
+        methodQuantities = new HashMap<>();
 
         // Create Toolbar Panel
         toolbarPanel = new JPanel();
@@ -75,46 +77,7 @@ public class Simulator extends JFrame implements WindowListener {
         infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
         return infoLabel;
     }
-    
-    private void addInfo(JPanel container, String strLabel){
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
 
-        JLabel label = new JLabel(strLabel);
-        label.setFont(new Font("Arial", Font.BOLD, 15));
-
-        JLabel info = null;
-        switch (strLabel){
-            case "Elapsed Time (s):": {
-                elapsedTime = new JLabel("001");
-                info = elapsedTime;
-                break;
-            }
-            case "Frames per Second (FPS):": {
-                fps = new JLabel("001");
-                info = fps;
-                break;
-            }
-            case "Thread Count:": {
-                threads = new JLabel("001");
-                info = threads;
-                break;
-            }
-            case "Particle Count:": {
-                particles = new JLabel("001");
-                info = particles;
-                break;
-            }
-        }
-
-        assert info != null;
-        info.setFont(new Font("Arial", Font.BOLD, 15));
-
-        panel.add(label, BorderLayout.WEST);
-        panel.add(info, BorderLayout.EAST);
-
-        container.add(panel);
-    }
     private void addCombinedPanel() {
         JPanel combinedPanel = new JPanel(new GridLayout(3, 1, 10, 10)); // 3 rows, 1 column
         combinedPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -148,6 +111,10 @@ public class Simulator extends JFrame implements WindowListener {
     
     private JPanel createAddJPanel(String title, String[] labels) {
         JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createDashedBorder(Color.DARK_GRAY, 1, 10, 5, false),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
         JLabel header = new JLabel(title);
         header.setHorizontalAlignment(SwingConstants.CENTER);
         header.setFont(new Font("Arial", Font.BOLD, 16));
@@ -155,28 +122,145 @@ public class Simulator extends JFrame implements WindowListener {
     
         JPanel container = new JPanel();
         container.setLayout(new GridLayout(labels.length, 1, 5, 5)); // Adjust gaps
-    
-        method1Quantities = new HashMap<>();
+
         for (String label : labels) {
-            addQuantityPanel(label, container);
+            addQuantityPanel(title, label, container);
             System.out.println(label);
         }
         panel.add(new JScrollPane(container), BorderLayout.CENTER); // Use JScrollPane to handle overflow
     
         JButton addButton = new JButton("Add now");
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                List<Particle> particles = new ArrayList<>();
+
+                switch (title){
+                    case "Particle Batch Linear": {
+
+                        int n = Integer.parseInt(methodQuantities.get(title+"N").getText());
+                        int x1 = Integer.parseInt(methodQuantities.get(title+"X1-coordinate").getText());
+                        int y1 = Integer.parseInt(methodQuantities.get(title+"Y1-coordinate").getText());
+                        int x2 = Integer.parseInt(methodQuantities.get(title+"X2-coordinate").getText());
+                        int y2 = Integer.parseInt(methodQuantities.get(title+"Y2-coordinate").getText());
+                        int angle = Integer.parseInt(methodQuantities.get(title+"Angle").getText());
+                        int velocity = Integer.parseInt(methodQuantities.get(title+"Velocity").getText());
+
+                        // Calculate the total distance between the two points
+                        double totalDistance = Math.hypot(x2-x1, y2-y1);
+
+                        // Calculate the increment for x and y coordinates
+                        double deltaX = (x2-x1) / (double) (n - 1);
+                        double deltaY = (y2-y1) / (double) (n - 1);
+
+                        // Generate points along the line
+                        for (int i = 0; i < n; i++) {
+                            int x = (int) Math.round(x1 + deltaX * i);
+                            int y = (int) Math.round(y1 + deltaY * i);
+                            particles.add(new Particle(
+                                    x,
+                                    y,
+                                    angle,
+                                    velocity
+                            ));
+                            System.out.println("("+x+","+y+")");
+                        }
+                        break;
+                    }
+
+                    case "Particle Batch Angular": {
+
+                        int n = Integer.parseInt(methodQuantities.get(title+"N").getText());
+                        int x = Integer.parseInt(methodQuantities.get(title+"X-coordinate").getText());
+                        int y = Integer.parseInt(methodQuantities.get(title+"Y-coordinate").getText());
+                        int startAngle = Integer.parseInt(methodQuantities.get(title+"Start Angle").getText());
+                        int endAngle = Integer.parseInt(methodQuantities.get(title+"End Angle").getText());
+                        int velocity = Integer.parseInt(methodQuantities.get(title+"Velocity").getText());
+
+                        int range = (int) (endAngle - startAngle)/ (n-1);
+                        for (int i = 1; i <= n; i++) {
+                            int angle = (int) Math.round(startAngle + (i * range));
+                            particles.add(new Particle(
+                                    x,
+                                    y,
+                                    angle,
+                                    velocity
+                            ));
+                            System.out.println(angle);
+                        }
+
+                        break;
+                    }
+
+                    case "Particle Batch Velocity": {
+
+                        int n = Integer.parseInt(methodQuantities.get(title+"N").getText());
+                        int x = Integer.parseInt(methodQuantities.get(title+"X-coordinate").getText());
+                        int y = Integer.parseInt(methodQuantities.get(title+"Y-coordinate").getText());
+                        int startVelocity = Integer.parseInt(methodQuantities.get(title+"Start Velocity").getText());
+                        int endVelocity = Integer.parseInt(methodQuantities.get(title+"End Velocity").getText());
+                        int angle = Integer.parseInt(methodQuantities.get(title+"Angle").getText());
+
+                        int range = (int) (endVelocity - startVelocity)/ (n-1);
+                        for (int i = 1; i <= n; i++) {
+                            int velocity = (int) Math.round(startVelocity + (i * range));
+                            particles.add(new Particle(
+                                    x,
+                                    y,
+                                    angle,
+                                    velocity
+                            ));
+                            System.out.println(velocity);
+                        }
+
+                        break;
+                    }
+
+                    case "ADD A WALL": {
+                        int x1 = Integer.parseInt(methodQuantities.get(title+"X1-coordinate").getText());
+                        int y1 = Integer.parseInt(methodQuantities.get(title+"Y1-coordinate").getText());
+                        int x2 = Integer.parseInt(methodQuantities.get(title+"X2-coordinate").getText());
+                        int y2 = Integer.parseInt(methodQuantities.get(title+"Y2-coordinate").getText());
+
+
+
+
+                        break;
+                    }
+                    default: {
+                        int x = Integer.parseInt(methodQuantities.get(title+"X-coordinate").getText());
+                        int y = Integer.parseInt(methodQuantities.get(title+"Y-coordinate").getText());
+                        int angle = Integer.parseInt(methodQuantities.get(title+"Angle").getText());
+                        int velocity = Integer.parseInt(methodQuantities.get(title+"Velocity").getText());
+                        break;
+                    }
+                }
+
+                for(JTextField field : methodQuantities.values()){
+                    field.setText("0");
+                }
+
+
+
+                System.out.println(title);
+            }
+        });
+
         addButton.setFont(new Font("Arial", Font.BOLD, 14));
         panel.add(addButton, BorderLayout.SOUTH);
     
         return panel;
     }
+
     
 
-    private void addQuantityPanel(String label, JPanel panel) {
+    private void addQuantityPanel(String title, String label, JPanel panel) {
         JPanel container = new JPanel();
         container.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         JTextField quantity = new JTextField("0");
-        method1Quantities.put(label, quantity);
+        methodQuantities.put(title+label, quantity);
 
         quantity.setPreferredSize(new Dimension(50, 25));
         quantity.setFont(new Font("Arial", Font.BOLD, 12));
@@ -186,7 +270,7 @@ public class Simulator extends JFrame implements WindowListener {
         increment.setFont(new Font("Arial", Font.PLAIN, 12));
         increment.setPreferredSize(new Dimension(45, 20));
         increment.setForeground(Color.black);
-        increment.setBackground(new Color(13, 21, 23));
+        increment.setBackground(Color.white);
         increment.setFocusPainted(false);
         increment.addActionListener(new ActionListener() {
             @Override
@@ -205,7 +289,7 @@ public class Simulator extends JFrame implements WindowListener {
         decrement.setFont(new Font("Arial", Font.PLAIN, 12));
         decrement.setPreferredSize(new Dimension(45, 20));
         decrement.setForeground(Color.black);
-        decrement.setBackground(new Color(13, 21, 23));
+        decrement.setBackground(Color.white);
         decrement.setFocusPainted(false);
         decrement.addActionListener(new ActionListener() {
             @Override
@@ -245,66 +329,69 @@ public class Simulator extends JFrame implements WindowListener {
     private void addCanvas(){
         // Canvas Panel
         canvasPanel = new Canvas();
+        canvasPanel.setLayout(null);
+        canvasPanel.setBackground(new Color(13, 21, 23));
+        canvasPanel.setPreferredSize(new Dimension(1280, 720));
         add(canvasPanel, BorderLayout.CENTER);
 
-        addOneParticle();
+//        addOneParticle();
     }
+//
+//    private void addOneParticle(){
+//        List<Particle> particles = new ArrayList<>();
+//        for (int i = 0; i < 10; i++) {
+//            particles.add(new Particle(
+//                    20+(7*i),
+//                    20,
+//                    30,
+//                    10
+//            ));
+//        }
+//
+//        canvasPanel.addParticles(particles);
+//    }
 
-    private void addOneParticle(){
-        List<Particle> particles = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            particles.add(new Particle(
-                    20+(7*i),
-                    20,
-                    30,
-                    10
-            ));
-        }
 
-        canvasPanel.addParticles(particles);
-    }
-
-
-    @Override
-    public void windowOpened(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowClosing(WindowEvent e) {
-        for (Thread thread : canvasPanel.getThreads()){
-            thread.interrupt();
-            try {
-                thread.join();
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-        }
-        System.out.println("closing");
-    }
-
-    @Override
-    public void windowClosed(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowIconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowActivated(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent e) {
-
-    }
+//    @Override
+//    public void windowOpened(WindowEvent e) {
+//
+//    }
+//
+//    @Override
+//    public void windowClosing(WindowEvent e) {
+//        for (Thread thread : canvasPanel.getThreads()){
+//            thread.interrupt();
+//            try {
+//                thread.join();
+//            } catch (InterruptedException ex) {
+//                ex.printStackTrace();
+//            }
+//        }
+//        System.out.println("closing");
+//    }
+//
+//    @Override
+//    public void windowClosed(WindowEvent e) {
+//
+//    }
+//
+//    @Override
+//    public void windowIconified(WindowEvent e) {
+//
+//    }
+//
+//    @Override
+//    public void windowDeiconified(WindowEvent e) {
+//
+//    }
+//
+//    @Override
+//    public void windowActivated(WindowEvent e) {
+//
+//    }
+//
+//    @Override
+//    public void windowDeactivated(WindowEvent e) {
+//
+//    }
 }

@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="876b93d6-769f-42e0-8c36-e77990772d70" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Canvas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Canvas.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Particle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Particle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Simulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Simulator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -44,7 +44,7 @@
     &quot;UI_DESIGNER_EDITOR_MODE.PaletteManager.SHOW&quot;: &quot;true&quot;,
     &quot;UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.SHOW&quot;: &quot;true&quot;,
     &quot;UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH&quot;: &quot;497&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;cymon-dev&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;irah-dev-ui&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -55,6 +55,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="Main" />
@@ -67,7 +72,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-18.0.2-corretto-18.0.2-4caba194b151-5720f15e" />
+        <option value="jdk-18.0.2-corretto-18.0.2-f644763e9732-da6bd485" />
       </set>
     </attachedChunks>
   </component>
@@ -86,6 +91,7 @@
       <workItem from="1707755522880" duration="7238000" />
       <workItem from="1707817498846" duration="23585000" />
       <workItem from="1707887591042" duration="4225000" />
+      <workItem from="1708077957557" duration="5898000" />
     </task>
     <servers />
   </component>
