@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="876b93d6-769f-42e0-8c36-e77990772d70" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Configuration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pair.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ParticleGui.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Simulator.java" beforeDir="false" />
-    </list>
+    <list default="true" id="876b93d6-769f-42e0-8c36-e77990772d70" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
