@@ -36,6 +36,9 @@ public class ParticleSimulator extends JFrame {
         pack();
         setVisible(true);
 
+        // Start the FPS counter thread
+        ///startFPSTracker();
+
     }
 
     private void addCanvas() {
@@ -69,25 +72,25 @@ public class ParticleSimulator extends JFrame {
         add(toolbarPanel, BorderLayout.EAST);
     }
 
+    //        // Information display panel
+//        JPanel infoPanel = new JPanel(new GridLayout(0, 2, 5, 5)); // 2 columns
+//        for (String strLabel : infoLabels) {
+//            JLabel label = new JLabel(strLabel);
+//            label.setFont(new Font("Arial", Font.BOLD, 14)); // Adjust font size
+//            infoPanel.add(label);
+//
+//            JLabel info = createInfoLabel(strLabel);
+//            info.setFont(new Font("Arial", Font.PLAIN, 14)); // Adjust font size
+//            infoPanel.add(info);
+//        }
+//        combinedPanel.add(infoPanel);
+
     private void addCombinedPanel() {
-        JPanel combinedPanel = new JPanel(new GridLayout(3, 1, 10, 10)); // 3 rows, 1 column
+        JPanel combinedPanel = new JPanel(new GridLayout(2, 1, 10, 0)); // 3 rows, 1 column
         combinedPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createDashedBorder(Color.DARK_GRAY, 1, 10, 5, false),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
-
-        // Information display panel
-        JPanel infoPanel = new JPanel(new GridLayout(0, 2, 5, 5)); // 2 columns
-        for (String strLabel : infoLabels) {
-            JLabel label = new JLabel(strLabel);
-            label.setFont(new Font("Arial", Font.BOLD, 14)); // Adjust font size
-            infoPanel.add(label);
-
-            JLabel info = createInfoLabel(strLabel);
-            info.setFont(new Font("Arial", Font.PLAIN, 14)); // Adjust font size
-            infoPanel.add(info);
-        }
-        combinedPanel.add(infoPanel);
 
         // Add-a-particle panel
         JPanel addParticlePanel = createAddJPanel("ADD A PARTICLE", method1Labels);
@@ -99,6 +102,10 @@ public class ParticleSimulator extends JFrame {
         combinedPanel.add(addWallPanel);
         toolbarPanel.add(combinedPanel);
     }
+
+
+
+
 
     private JLabel createInfoLabel(String labelText) {
         JLabel infoLabel = new JLabel("001"); // Initial value
@@ -272,6 +279,7 @@ public class ParticleSimulator extends JFrame {
 
         return panel;
     }
+
 
     private void addQuantityPanel(String title, String label, JPanel panel) {
         JPanel container = new JPanel();

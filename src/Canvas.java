@@ -29,6 +29,10 @@ public class Canvas extends JPanel {
 
     private final Lock wallsLock = new ReentrantLock();
 
+    private long lastFrameTime = System.nanoTime();
+    private int frameCount = 0;
+    private int currentFPS = 0;
+
 
     public Canvas() {
         canvas = new DrawCanvas();
@@ -50,6 +54,19 @@ public class Canvas extends JPanel {
             for (Wall wall : walls) {
                 wall.draw(g);
             }
+            // Calculate FPS
+            long currentTime = System.nanoTime();
+            long elapsedTime = currentTime - lastFrameTime;
+            if (elapsedTime >= 1_000_000_000) { // If one second has elapsed
+                currentFPS = frameCount;
+                frameCount = 0;
+                lastFrameTime = currentTime;
+            } else {
+                frameCount++;
+            }
+            // Draw FPS
+            g.setColor(Color.BLACK);
+            g.drawString("FPS: " + currentFPS, 10, 20);
         }
 
         public Dimension getPreferredSize() {
@@ -101,6 +118,7 @@ public class Canvas extends JPanel {
         wallsLock.lock();
         try {
             this.walls.add(wall);
+            repaint();
         } finally {
             wallsLock.unlock();
         }
